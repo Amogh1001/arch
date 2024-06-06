@@ -1,0 +1,47 @@
+ 
+#!/bin/bash
+
+# Path to the wallpaper image
+WALLPAPER_PATH="$1"
+
+# Check if the file exists
+if [[ ! -f "$WALLPAPER_PATH" ]]; then
+    echo "File not found!"
+    exit 1
+fi
+
+
+dbus-send --session --dest=org.kde.plasmashell --type=method_call /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
+var Desktops = desktops();
+for (i=0;i<Desktops.length;i++) {
+        d = Desktops[i];
+        d.wallpaperPlugin = "org.kde.image";
+        d.currentConfigGroup = Array("Wallpaper",
+                                    "org.kde.image",
+                                    "General");
+        d.writeConfig("Image", "file://${WALLPAPER_PATH}");
+}'
+
+
+
+# # Set the wallpaper for each screen and activity
+# for activity in $(qdbus org.kde.ActivityManager /ActivityManager/Activities ListActivities); do
+#     for screen in $(qdbus org.kde.KWin /KWin org.kde.KWin.screens); do
+#         for desktop in $(qdbus org.kde.KWin /KWin org.kde.KWin.desktops); do
+#             qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+#             var Desktops = desktops();
+#             for (i=0;i<Desktops.length;i++) {
+#                 d = Desktops[i];
+#                 d.wallpaperPlugin = 'org.kde.image';
+#                 d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General');
+#                 d.writeConfig('Image', 'file://${WALLPAPER_PATH}');
+#             }"
+#         done
+#     done
+# done
+
+echo "Wallpaper changed to $WALLPAPER_PATH"
+wal -i $WALLPAPER_PATH
+bash ~/Scripts/ChromePyWal/generate-theme.sh
+bash walogram
+bash neofetch
