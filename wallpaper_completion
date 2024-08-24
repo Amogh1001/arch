@@ -1,0 +1,13 @@
+# /etc/bash/completion.d/wallpaper
+# install bash-completion
+
+_wallpaper_completion() {
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    local dir="$HOME/Pictures/Wallpapers" # Adjust the directory as needed
+
+    # Get all filenames without extensions in the specified directory
+    local files=$(ls "$dir" 2>/dev/null | sed 's/\.[^.]*$//')
+    COMPREPLY=($(compgen -W "$files" -- "$cur"))
+}
+
+complete -F _wallpaper_completion wallpaper
