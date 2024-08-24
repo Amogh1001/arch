@@ -1,8 +1,16 @@
- 
 #!/bin/bash
 
+# /bin/wallpaper
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 image_name"
+  exit 1
+fi
+
 # Path to the wallpaper image
-WALLPAPER_PATH="$1"
+image_name="$1"
+
+WALLPAPER_PATH="$HOME/Pictures/Wallpapers/${image_name}.png"
 
 # Check if the file exists
 if [[ ! -f "$WALLPAPER_PATH" ]]; then
@@ -10,38 +18,12 @@ if [[ ! -f "$WALLPAPER_PATH" ]]; then
     exit 1
 fi
 
-
-dbus-send --session --dest=org.kde.plasmashell --type=method_call /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
-var Desktops = desktops();
-for (i=0;i<Desktops.length;i++) {
-        d = Desktops[i];
-        d.wallpaperPlugin = "org.kde.image";
-        d.currentConfigGroup = Array("Wallpaper",
-                                    "org.kde.image",
-                                    "General");
-        d.writeConfig("Image", "file://${WALLPAPER_PATH}");
-}'
-
-
-
-# # Set the wallpaper for each screen and activity
-# for activity in $(qdbus org.kde.ActivityManager /ActivityManager/Activities ListActivities); do
-#     for screen in $(qdbus org.kde.KWin /KWin org.kde.KWin.screens); do
-#         for desktop in $(qdbus org.kde.KWin /KWin org.kde.KWin.desktops); do
-#             qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
-#             var Desktops = desktops();
-#             for (i=0;i<Desktops.length;i++) {
-#                 d = Desktops[i];
-#                 d.wallpaperPlugin = 'org.kde.image';
-#                 d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General');
-#                 d.writeConfig('Image', 'file://${WALLPAPER_PATH}');
-#             }"
-#         done
-#     done
-# done
+# Set the wallpaper
+sudo cp $WALLPAPER_PATH /usr/share/wallpapers/Next/contents/images_dark/1920x1080.png
+sudo cp $WALLPAPER_PATH /usr/share/wallpapers/Next/contents/images/1920x1080.png
+sudo cp $WALLPAPER_PATH /usr/share/sddm/themes/breeze/preview.png
+plasma-apply-wallpaperimage "$WALLPAPER_PATH"
 
 echo "Wallpaper changed to $WALLPAPER_PATH"
 wal -i $WALLPAPER_PATH
-bash ~/Scripts/ChromePyWal/generate-theme.sh
-bash walogram
 bash neofetch
