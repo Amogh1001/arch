@@ -3,7 +3,7 @@
 # /bin/wallpaper
 
 if [ -z "$1" ]; then
-  echo "Usage: $0 image_name"
+  ls ~/Pictures/Wallpapers
   exit 1
 fi
 
