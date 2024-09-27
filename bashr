@@ -9,11 +9,7 @@
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-USERHOST=$(echo -e '\e[30m\e[1;46m')
-BREAK1=$(echo -e '\e[30m\e[1;45m')
-WORKING_DIRECT=$(echo -e '\e[30m\e[1;44m')
-BREAK2=$(echo -e '\e[30m\e[1;45m ')
-PS1='${USERHOST} \u@\h$ ${BREAK1}${WORKING_DIRECT} \w$(git branch 2>/dev/null | grep \* | cut -d " " -f2 | awk "{print \" \[\e[30m\e[1;42m\] \" \$0 }") \[\e[40m\e[1;96m\] $\[\e[0m\] '
+PS1='\[\e[1;96m\][ \u@\h \[\e[1;95m\]\w\[\e[1;94m\]$(git branch 2>/dev/null | grep \* | cut -d " " -f2 | sed "s/^/ &/") \[\e[1;96m\]] \n\$\[\e[0m\] '
 
 # Import colorscheme from 'wal' asynchronously
 # &   # Run the process in the background.
